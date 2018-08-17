@@ -2,7 +2,7 @@
 
 
 ## What is Passport?
-An authentication library. It doesn't handle hashing passwords or sessions, but links to node session library and express. The official documentation is just ok, so look at other respositories on GitHub for strategies.
+An authentication library. It doesn't handle hashing passwords or sessions, but links to node session library and express. The official documentation is just ok, so look at other respositories on GitHub for strategies. This is a good reference for Facebook authentication: https://github.com/passport/express-4.x-facebook-example/
 
 ## Strategies
 This is the first thing to figure out when setting up user authentication.
