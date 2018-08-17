@@ -23,7 +23,7 @@ const strategy = new Strategy(
               console.log("User " + username + " was not in the DB");
               return done(null, false, { message: 'Incorrect username.' });
             }
-            if (!user.validPassword(password)) {
+            if (!DBuser.validPassword(password)) {
             // if (!(DBuser.password===password)) {
               console.log("Password " + password + " does not match the password in the DB: " + DBuser.password ); //For the love of all that is good and secure, never console log user passwords in a production app
 

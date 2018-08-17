@@ -37,6 +37,15 @@ module.exports = function(passport) {
 
 		  }
 	);
+	router.get("/testmiddleware", (req,res,next)=>{
+		if (req.user) next();
+		else {
+			res.sendStatus(403);
+			res.send("Please Log in");
+		}
+	},
+	(req,res)=>res.send("You are logged in with user " + req.user.username)
+	);
 
 	router.get('/logout',
 		
