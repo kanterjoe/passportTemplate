@@ -1,25 +1,32 @@
 var router = require('express').Router()
 
 const ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn
-
+const checkLogin = (req,res,next)=>{
+	if (req.user) next();
+	else {
+		res.sendStatus(403);
+		res.send("Please Log in");
+	}
+}
 module.exports = function(passport) {
 	router.get('/login',	  	function(req, res) {
 		res.send(`
 			<form method="post"> 
 				<input name="username"/>
-								<input name="password"/>
-								<input type="submit">
+				<input name="password"/>
+				<input type="submit">
 
 			</form>
 
 			`);
 	});
 	router.post('/login',
-		passport.authenticate('local'),
+		passport.authenticate('local'), //this is the magic
 	  	function(req, res) {
 		    // If this function gets called, authentication was successful.
 		    // `req.user` contains the authenticated user.
-		    //res.sendFile()
+			//res.sendFile()
+			
 		    res.json({success:(req.user? "Yes":"No"), user:req.user});
 		}
 	)
@@ -37,14 +44,8 @@ module.exports = function(passport) {
 
 		  }
 	);
-	router.get("/testmiddleware", (req,res,next)=>{
-		if (req.user) next();
-		else {
-			res.sendStatus(403);
-			res.send("Please Log in");
-		}
-	},
-	(req,res)=>res.send("You are logged in with user " + req.user.username)
+	router.get("/testmiddleware", checkLogin,
+		(req,res)=>res.send("You are logged in with user " + req.user.username)
 	);
 
 	router.get('/logout',

@@ -1,13 +1,13 @@
 let passport      = require('passport');
-let session       = require("express-session")({ secret: "cats", resave: false, saveUninitialized: false  });
+let session       = require("express-session")({ secret: "ctiosckzhgkyntvitviaw4", resave: false, saveUninitialized: false  });
 
 
 let User = require ('./models/user')
 
 module.exports = function(expressApp) {
 	//initialize your authentication strategies
-  // passport.use(require('./auth_strategies/github'))
-  passport.use(require('./auth_strategies/local'))
+  passport.use(require('./auth_strategies/github'))
+  // passport.use(require('./auth_strategies/local'))
 
 
   //===============BOILERPLATE
@@ -31,9 +31,9 @@ module.exports = function(expressApp) {
   expressApp.use(
     require("./routes/github-authentication-routes")(passport)
     )
-  expressApp.use(
-    require("./routes/authentication-routes")(passport)
-    )
+  // expressApp.use(
+  //   require("./routes/authentication-routes")(passport)
+  //   )
 
   return passport;
 
@@ -83,9 +83,10 @@ Passport will handle the session ids and everything else for you.
 //Since our user is a Sequelize Model, we can just save the model to serialize it.
 //the data is now persisted to the database
 const serializeUser = function(user, done) {
-  console.log("serializing user:", user.id)
+  const id = (user.id? user.id: user[0].id) //might be differe
+  console.log("serializing user:", id)
   //user.save();
-  done(null, user.id);//save the user's id in the cookie. This is how Passport wants you to do this. 
+  done(null, id);//save the user's id in the cookie. This is how Passport wants you to do this. 
 }
 
 //  deserializeUser is called when resuming a session

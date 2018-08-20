@@ -25,16 +25,19 @@ const strategy = new Strategy({
     // allows for account linking and authentication with other identity
     // providers.
 
-    console.log("Successfully logged in: ", accessToken, refreshToken, profile);
-
+    console.log("Successfully logged in: ", profile);
+    
     User.findOrCreate({
       where :{
         github_id: profile.id
-      }
+      }, 
+      defaults: {username: profile.username}
     })
+    .then(DBuser => cb (null, DBuser))
 
+    .catch()
 
-    return cb(null, profile);
+    //return cb(null, profile);
   });
 
 module.exports = strategy;

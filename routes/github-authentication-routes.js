@@ -6,7 +6,7 @@ module.exports = function(passport) {
 
 	//github routes
 	router.get("/", function(req,res) {
-		console.log("In /:",req.user);
+		console.log("In /:");
 		res.send();
 	})
 	router.get('/login/github', passport.authenticate('github'));
@@ -14,10 +14,11 @@ module.exports = function(passport) {
 
 
 	router.get('/login/github/callback', 
-		  //passport.authenticate('github', { failureRedirect: '/' }),
+	//ensureLoggedIn('/'),
+		  passport.authenticate('github', { failureRedirect: '/' }),
 		  function(req, res) {
-
-		  	console.log("In callback. User:", req.user,"query:", req.query)
+			console.log("User logged in: ", req.user.id);
+		  	//console.log("User Logged In. User:", req.user,"query:", req.query)
 
 		    res.redirect('/testgithubuser');
 		  }
@@ -28,9 +29,10 @@ module.exports = function(passport) {
 	//use this route to test the user
 	router.get('/testgithubuser',
 		//passport.authenticate('local'),
-		//ensureLoggedIn('/'),
+		ensureLoggedIn('/login/github'),
+
 		function(req, res) {
-				console.log("getting github user", );
+				console.log("getting github user", req.user);
 
 		    res.json({success:(req.user? "Yes":"No"), user:req.user});
 		    console.log("Done getting test user");
