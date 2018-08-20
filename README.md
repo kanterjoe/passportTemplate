@@ -4,11 +4,31 @@
 ## What is Passport?
 An authentication library. It doesn't handle hashing passwords or sessions, but links to node session library and express. The official documentation is just ok, so look at other respositories on GitHub for strategies. This is a good reference for Facebook authentication: https://github.com/passport/express-4.x-facebook-example/
 
+# A Practical Note of Great Import
+`req.user` will be filled in for you (an object containing all the user information stored in the database) after setting up passport. The rest of your team/you can then access user information from db with `req.user.whateverPropertyYouWantFromDB`.
+
+For example, say you are creating a route where a user can get a list of all the widgets they own. You can make a route called `/widgets` that looks like this:
+
+```javascript
+expressApp.get('/widgets',
+    ensureLoggedIn(),//this ensures the following function won't run unless the user is authenticated
+    function(req, res) {
+        widgets.find({
+            where :{user_id: req.user.id} //req.user will be populated with everything you need to know about the user
+        })
+        .then(function(widgets){
+            res.json(widgets);
+        })
+
+    }
+);
+```
+
 ## Strategies
 This is the first thing to figure out when setting up user authentication.
-1. Basic/Local: Stores user information into your own database.
+1. Basic/Local: information required to authenticate a user (i.e. username and password) is stored in your own database.
 
-2. OAuth: Authentication happens on someone else's server. We will use this strategy with GitHub, which is also largely applicable to Google's.
+2. OAuth: Authentication information is stored on and is performed on someone else's server (known as the 'OAuth provider'). We will use this strategy with GitHub, which is also largely applicable to Google's/Facebook's/and other OAuth provider.
 
 These are located in the auth_strategies folder. 
 
@@ -43,16 +63,15 @@ The module exports form can be changed, but must still contain username and pass
 
 `passport.authenticate('local')` will use the local strategy. The function after passport.authenticate is where you change what will be sent back You will probably want to put in a redirect to their next page or "true" to display the rest of the page if it's a single page app (currently it returns a json file from the database, including their username and password).
 
-Be careful about order; initialize, then session, then routes. This is correct in this repository, so just copy everything within the 'boilerplate' comments. Don't touch it. Seriously. Joe worked really hard on it. Also, only the route(s) corresponding to your strategy need to be present.
+Be careful about order; initialize, then session, then routes. This is correct in this repository, so just copy everything within the 'boilerplate' comments. Don't touch it. Seriously. Joe says it is super finnicky. Also, only the route(s) corresponding to your strategy need to be present.
 
 #### github-authentication-routes.js (OAuth strategy)
-"`passport.authenticate('github')` will use the GitHub OAuth strategy. The '/login/github' route will redirect to github's authentication. The user will the login directly on GitHub's website. If authenticated, it will redirect back to a route you define in github.js > const strategy{ callbackURL: }. Otherwise it will redirect back to the Homepage URL defined in the GitHub OAuth registration (some others allow you to define something else).
+`passport.authenticate('github')` will use the GitHub OAuth strategy. The '/login/github' route will redirect to github's authentication. The user will the login directly on GitHub's website. If authenticated, it will redirect back to a route you define in github.js > const strategy{ callbackURL: }. This route is known as the 'Callback' route, and needs to be defined by you. In this example, it is defined as `/login/github/callback`. Otherwise it will redirect back to the Homepage URL defined in the GitHub OAuth registration (some others allow you to define something else).
 
 ## passport-init.js
 Change the `secret` to a random long-ish string. It uses this to create your session ids, but you don't need to remember this. Change `passport.use` to require the correct auth_strategies file (local.js for local, or github.js for github OAuth). Serializing shuts down a session and stores info to persistent storage, and deserialization pulls info from persistent storage when a new session is started (user logs in). If not using MySql/Sequelize, you will need to change the db syntax in `const deserializeUser` to match your db.
 
-# A Practical Note of Great Import
-`req.user` will be filled in for you (an object containing all the user information stored in the database) after setting up passport. Rest of your team/you can then access user information from db with `req.user.whateverPropertyYouWantFromDB`.
+
 
 ## More Sundry Information
 
