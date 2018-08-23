@@ -1,11 +1,11 @@
 const Sequelize = require('sequelize');
-const DB_USER='passport-test',
-      DB_PASS='lkNNanCkCZdiBQ0G'
-// DB_USER='root' 
-// DB_PASS='root'
+//
+const DB_DB  = 'passport-test',
+DB_USER='root' 
+DB_PASS='root'
 
 
-const sequelize = new Sequelize(DB_USER, DB_USER, DB_PASS, {
+const sequelize = new Sequelize(DB_DB, DB_USER, DB_PASS, {
   host: 'localhost',
   dialect: 'mysql',//|'sqlite'|'postgres'|'mssql',
   port: 8889,

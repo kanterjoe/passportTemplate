@@ -7,7 +7,7 @@ let User = require ('./models/user')
 module.exports = function(expressApp) {
 	//initialize your authentication strategies
   passport.use(require('./auth_strategies/github'))
-  // passport.use(require('./auth_strategies/local'))
+  passport.use(require('./auth_strategies/local'))
 
 
   //===============BOILERPLATE
@@ -31,9 +31,9 @@ module.exports = function(expressApp) {
   expressApp.use(
     require("./routes/github-authentication-routes")(passport)
     )
-  // expressApp.use(
-  //   require("./routes/authentication-routes")(passport)
-  //   )
+  expressApp.use(
+    require("./routes/local-authentication-routes")(passport)
+    )
 
   return passport;
 

@@ -4,8 +4,6 @@ require('dotenv').config()
 var express = require ("express");
 var bodyParser = require('body-parser');
 
-//*Todays Checkpoint (timers and APIs):* https://www.switchboard.tech/checkpoint/4f7a914c43814e74d267d646c2a40a78
-
 var app = express();
 
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -19,9 +17,21 @@ const passport = require('./passport-init')(app);
 
 //Do more stuff here
 
-var PORT = 3000;
+const PORT = 3000;
 
 
+//the forbidden route. This is where all protected routes will be directed when auth fails 
+app.get('/forbidden', (req,res) => {
+    res.send(403, 'You are not authorized')
+});
+
+// Setup Routes
+const protectedRoutes   = require('./routes/protected-routes');
+const pubRoutes         = require('./routes/public-routes');
+
+app.use(pubRoutes);
+//make sure protectedRoutes is app.use'd after the public routes.
+app.use(protectedRoutes);
 
 app.listen(PORT, function() {
     console.log('Listening on port ' + PORT);
