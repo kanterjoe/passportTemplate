@@ -17,7 +17,6 @@ var User = sequelize.define("user", {
 
 
 
-
 User.prototype.validPassword = function(password) {
   
   console.log("Password from the DB:" , this.password)

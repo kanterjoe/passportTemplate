@@ -13,7 +13,7 @@ router.route("/ping")
     .get(  (req,res) => res.send(`pong`))
 
 router.route("/greet")
-    .get( (req, res) => res.send(`Hello, ${req.user.username}`))
+    .get( (req, res) => res.send(`Hello, ${req.user.username}. Your email is ${req.user.email_address}`))
 
 router.route("/self")
     .put( (req,res) => {

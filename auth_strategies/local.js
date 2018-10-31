@@ -8,6 +8,11 @@ let User = require ('../models/user')
 // 1. check if the user is in the database 
 // 2. check if the password matches
 const strategy = new Strategy(
+  // 
+  // {
+  // usernameField: 'email',
+  // passwordField: 'passwd'
+  // },
   //{  session: true },
   //Passport will give us the username and password and the "done" function. 
   function(username, password, done) {
@@ -35,7 +40,11 @@ const strategy = new Strategy(
             return done(null, DBuser);
           }
 
-    );
+    )
+    .catch(err => {
+      return done(err, false, { message: 'Some DB error:' });
+    })
+    ;
   }
 );
 

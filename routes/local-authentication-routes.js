@@ -4,8 +4,8 @@ const ensureLoggedIn = require('connect-ensure-login').ensureLoggedIn
 const checkLogin = (req,res,next)=>{
 	if (req.user) next();
 	else {
-		res.sendStatus(403);
-		res.send("Please Log in");
+		//res.sendStatus(403);
+		res.send(403, "Please Log in");
 	}
 }
 module.exports = function(passport) {

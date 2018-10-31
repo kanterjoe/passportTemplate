@@ -12,7 +12,6 @@ let User          = require('../models/user');
 
 
 console.log("GitHub app Client ID: ",process.env.CLIENT_ID); //test that we got our env setup right
-
 const strategy = new Strategy({
     clientID: process.env.CLIENT_ID,
     clientSecret: process.env.CLIENT_SECRET,

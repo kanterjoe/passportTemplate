@@ -2,11 +2,11 @@ let passport      = require('passport');
 let session       = require("express-session")({ secret: "ctiosckzhgkyntvitviaw4", resave: false, saveUninitialized: false  });
 
 
-let User = require ('./models/user')
+let User = require ('./models/user');
 
 module.exports = function(expressApp) {
 	//initialize your authentication strategies
-  passport.use(require('./auth_strategies/github'))
+  // passport.use(require('./auth_strategies/github'))
   passport.use(require('./auth_strategies/local'))
 
 
@@ -28,9 +28,9 @@ module.exports = function(expressApp) {
 
   //Initialize authentication specific routes. This needs to be changed to match your configs
 
-  expressApp.use(
-    require("./routes/github-authentication-routes")(passport)
-    )
+  // expressApp.use(
+  //   require("./routes/github-authentication-routes")(passport)
+  //   )
   expressApp.use(
     require("./routes/local-authentication-routes")(passport)
     )
